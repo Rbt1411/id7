@@ -4,48 +4,4 @@ Newest first. Dates are when the build was pushed.
 
 ## Nov 9 2026
 
-- **Cluster Themes 0.14.0, HUD Widgets 0.12.0:** a better G-meter for Rally and Track. The dot turns amber from 0.5 g and red from 0.8 g and leaves a fading trail, an outline shows the most g reached this drive in every direction, and the meter has a bezel with ticks and finer rings. Under it (Rally) or beside it (Track): the g now, as left or right and accelerating or braking, and the best of the drive. A new G-meter tab on the center screen sets the range (0.8 to 2.0 g, 1.2 by default) and the trail length, holds the two swap switches ("swap accel / brake" is now "Brake on top"), shows the bests of the drive with a Reset button, and has a live copy of the meter.
-- **HUD Widgets 0.11.0:** every layout spread out to the HUD's real edges. BMW's own height-adjust frame shows the picture reaching about 80 px further right than the layouts used, so they now run from x 120 to 680 instead of stopping at 600. Every layout also leaves the bottom-left corner empty, where BMW draws its speed and speed-limit sign and, in Sport, its own rev band, so no layout gets covered in any drive mode. Cruise's figures are bigger. The Window calibration frame shows the new edges.
-
-## Nov 8 2026
-
-- **Cluster Themes 0.13.0:** a new Dyno theme in BMW M colours: twelve readout tiles (rpm, speed, boost, oil, coolant, intake, cornering and braking g, gear, fuel, range, outside temperature) and tall Power and Torque tiles, each with a bar, and a rev bar across the top. A tile turns red while its oil, coolant or boost reading is over the warning limit. Every tile but the gear can show another sensor (the Readouts tab now lists long slot lists in two columns). The G-meter now moves the way the car accelerates (into the turn, up when speeding up), and two new settings swap left and right or accelerating and braking. G readings are smoothed over 0.15 s and a reading over 3 g is ignored. A readout set to intake air or boost now asks the engine unit for it (before, only Warm-up and readouts that named it did).
-- **HUD Widgets 0.10.0:** the same G-meter changes and settings for the Track layout, and the same intake and boost fix for the readouts.
-
-## Nov 7 2026
-
-- **Cluster Themes 0.12.0:** three more themes. Rally (a segmented rev arc sweeping across the top, a huge gear, a G-meter, boost with a peak-hold bar), Retro 80s (amber seven-segment digits over their unlit 8s, a segmented rev bar and bar graphs for oil, water and fuel) and Cruise (calm and quiet: the speed and a row of range, fuel, outside temperature, average speed and the time). Track's readouts show the ° after a temperature again (0.11.0 dropped it), and a readout whose font can't draw a character switches to one that can. Credits for the Orbitron and DSEG7 fonts are in NOTICE.
-- **HUD Widgets 0.9.0:** three more layouts. Track (shift lights, the gear and a G-meter), Cruise (range, outside temperature, average speed and the time) and Retro (amber seven-segment figures with bar graphs).
-- **Cluster Themes 0.11.0:** four new themes. Minimal (just the speed, the gear and a fuel line), Roadster (two classic round dials with chrome rings), Track (a big gear, the four tyres, oil, coolant and boost) and Drag (a full-width shift bar and a 0 to 60 timer that keeps your best time). The Themes tab shows every theme in two rows. A readout can now show the intake air temperature, read from the engine unit.
-- **HUD Widgets 0.8.0:** four new layouts. Minimal (built round BMW's own speed and speed-limit sign), Shift only, Boost (a gauge that holds the peak) and Warm-up (oil, coolant and intake air as bars until the engine is warm). The Layouts tab shows the cards in two rows.
-- **Cluster Themes 0.10.0:** M gets a map version too: a window between the rev blades, with the gear and speed side by side under it. The map window in GT3 and Sport is narrower, so it ends before BMW's black gear box instead of running into it, and Sport's speed and gear move beside the map while its fuel and oil gauges step off it. M uses much less of cluster-render's picture memory (9.1 MiB instead of 13.2): on the car its speed unit, clock and oil numbers could go missing when the memory ran out. Picking a theme while HUD Widgets is on now asks whether to turn the HUD off.
-- **HUD Widgets 0.7.0:** an Off card first among the layouts turns the HUD off in every drive mode. Picking a layout while a cluster theme is on asks whether to turn the theme off. The layout pictures show the day colours.
-- **Cluster Themes 0.9.0:** a page of its own on the center screen instead of BMW's settings list: the themes with pictures, the readout boxes (pick any car sensor for each GT3 box), a model badge, the Waze map, alerts and settings. "Show Waze map inside the theme" replaces "Leave room for the map": Waze on Cluster draws its map inside GT3 or Sport, above BMW's own map view, so BMW's speed and gauges no longer show twice. Warnings flash a readout red over an oil, coolant or boost limit, a button tests the shift lights, and the colours dim after sunset.
-- **HUD Widgets 0.6.0:** the same kind of page: layouts with pictures, the readouts, the HUD's position and size on the glass, colours, alerts and settings. Brighter, solid colours that read better on the glass, warnings, and the shift-light test.
-- **Cluster Themes 0.8.4:** the M theme fills the panel: taller blades and cards that reach from the top of the screen to the bottom, bigger side groups, and black cards with a grey rim so BMW's black gear box no longer shows as a hole. New Map calibration theme for measuring the map cut-out on a photo.
-
-## Nov 6 2026
-
-- **Cluster Themes 0.8.2:** installs from the Store again. 0.8.1 (and 0.8.0) asked to read the car's M Drive gearbox display, which the car only sends as updates, so the head unit's app manager refused to install the app. It now only listens for those updates; the S or M next to the gear works as before.
-- **Cluster Themes 0.8.1:** the M theme traced 1:1 off the M8 photo instead of restyled from it: the cards' curved top edge and big rounded corners, the blades' exact curve, width and ticks, the fuel and oil dials as the M8's thin glass brackets cut from the photo's own circles (a hatched chrome bezel, glass lit from the bottom up to the level, a red streak at the level and at the reserve or hot end), every number and label in a squared bold face like BMW's (Orbitron, open licence; S no longer reads as 8), and every readout at the photo's position and size. The only departures are forced by the X3: the setup rows are split round BMW's black box (two above it, two below), the badge is the M stripes alone, and the rev scale ends at 7.
-- **Cluster Themes 0.8.0:** the M theme reworked from the car photos: near-black cards stretched to the panel's full height, round fuel and oil dials in the lower corners, taller rev blades, the gear with its shifter programme (D, S or M), the setup rows for all five drive modes (Individual shows as INDIVIDUAL: the car does not report what each part is set to), and the tyre block reading the car's own units (it showed 32 psi as 464 psi). The layer budget per theme is 24 after the car drew all sixteen probe layers of the calibration grid.
-- **Cluster Themes 0.7.5:** the Sport and M rev scales end at 7000 rpm, like the M40i's own cluster (they read to 8 before). The red marks always cover at least the last 500 rpm, with the yellow ones in the 700 rpm before them.
-- **Cluster Themes 0.7.4:** the M theme rebuilt against the M8 photo. Bowed glass rev blades with a red marker at the rpm, charcoal cards, white gear and speed, and the tyre pressure and temperature block (from the car's tyre monitor) in place of the G-meter.
-
-## Nov 5 2026
-
-- **Cluster Themes 0.7.3, HUD Widgets 0.5.3:** the calibration grids carry a line of text drawn by a shader from a glyph atlas, a test for a lighter way to draw readouts.
-- **Cluster Themes 0.7.2, HUD Widgets 0.5.2:** the drawing engine can use several connections to cluster-render (8 layers each), counts the pixel memory a layout costs, and sends only the pixels of text that changed.
-- **Cluster Themes 0.7.1, HUD Widgets 0.5.1:** the shift lights come on from 3000 rpm, so they are not dark when revving parked.
-- **Cluster Themes 0.7.0:** the Dials theme is removed after the car test.
-- **Cluster Themes 0.6.0, HUD Widgets 0.5.0:** fixes from the second car test. Every theme fits in the car's limit of 8 layers, backdrops are pure black (dark tints show on the panel), and nothing sits under the hood line or BMW's black gear box. The HUD layouts are fitted to the visible window measured from the grid photo.
-- **Cluster Themes 0.5.1:** the M and Sport themes match BMW's own clusters.
-- **Cluster Themes 0.5.0:** a Dials theme (removed again in 0.7.0), Sport restyled, 200 mph speed scale.
-
-## Nov 4 2026
-
-- **Cluster Themes 0.4.0:** Sport theme, after BMW's Live Cockpit view.
-- **Cluster Themes 0.3.0:** M theme.
-- **Cluster Themes 0.2.0, HUD Widgets 0.4.0:** fixes from the first car test. Shapes drew upside down, boost did not show (now read from the engine computer as a backup), and the rpm wobbled at idle. Both apps get an Off option and drive mode switching; the calibration grids are added.
-- **Cluster Themes 0.1.0:** first release, with the GT3 race dash.
-- **HUD Widgets 0.3.0:** Daily, Sport and Redline layouts.
+New
