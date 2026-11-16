@@ -15,7 +15,7 @@ for root in ('tools/iconix-audiod','vendors/nico/tools/iconix-audiod'):
     config=json.loads((t/'component.json').read_text())
     for f in config['files']:
         assert (t/f['path']).is_file(),str(t/f['path'])
-    assert config['version']=='0.5.2-b57'
+    assert config['version']=='0.5.3'
     print('TOOL OK',root)
 prof=json.loads((ROOT/'apps/iconix_sounds/app.json').read_text())
 assert any(p[0]=='b57_540d' for x in prof['settings'] if x['key']=='profile' for p in x['options'])

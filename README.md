@@ -1,3 +1,7 @@
+## Iconix Sounds 0.5.3 — Anzeige im MGU Store
+
+Die App liegt unter `apps/iconix_sounds/app.json`. Im MGU Store die GitHub-Quelle `Rbt1411/id7` mit Branch `main` aktualisieren. Soundausgabe ueber MGU-Lautsprecher ungetestet.
+
 # Rbt1411 / id7 – korrigierter MGU-Store-Build + B57 Sport
 
 Dieses ZIP basiert auf der hochgeladenen `id7-main(1).zip`.
@@ -5,8 +9,8 @@ Dieses ZIP basiert auf der hochgeladenen `id7-main(1).zip`.
 ## Enthalten
 
 - DPF Status 0.1.25, Spritmonitor 0.1.24, Drive Coach 1.0.1
-- Iconix Sounds 0.5.2-b57 mit allen sieben bisherigen Profilen und zusätzlichem **BMW B57 540d Sport**
-- Iconix Audio-Dienst 0.5.2-b57 mit den drei lokalen B57-WAV-Aufnahmen (Leerlauf, Gas, Schub)
+- Iconix Sounds 0.5.3 mit allen sieben bisherigen Profilen und zusätzlichem **BMW B57 540d Sport**
+- Iconix Audio-Dienst 0.5.3 mit den drei lokalen B57-WAV-Aufnahmen (Leerlauf, Gas, Schub)
 
 ## Reparatur der fehlenden dist/*.tgz Dateien
 

@@ -2,7 +2,7 @@
   "id": "iconix_sounds",
   "title": "Iconix Sounds",
   "description": "Iconix Sounds mit zusaetzlichem samplebasierten BMW B57 540d Sport-Profil (Aquaphobic Soundmod); experimentelle Wiedergabe via iconix-audiod.",
-  "version": "0.5.2-b57",
+  "version": "0.5.3",
   "vendor": "custom",
   "loggingId": "ICXS",
   "iconGlyph": "engine",

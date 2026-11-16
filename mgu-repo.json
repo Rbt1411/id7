@@ -21,8 +21,7 @@
         "vendors/nico/kit",
         "vendors/nico/apps",
         "vendors/nico/tools/iconix-audiod",
-        "tools/iconix-audiod",
-        "apps/iconix_sounds"
+        "tools/iconix-audiod"
       ]
     }
   },

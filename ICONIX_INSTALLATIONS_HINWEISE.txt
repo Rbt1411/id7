@@ -1,0 +1,23 @@
+ICONIX SOUNDS SICHTBARKEIT / B57 — VERSION 0.5.3
+
+Diese Datei basiert auf der letzten MGU-Store-Fix-Version.
+
+Aenderungen:
+* Version des Iconix-Sounds-App-Manifests und Audio-Tools auf 0.5.3 gesetzt.
+* Beide App-Kopien (apps/ und vendors/nico/apps/) und beide Audio-Tool-Kopien
+  synchronisiert.
+* Anzeigename, ID (iconix_sounds), Autostart, B57-Sample-Dateien,
+  die sieben vorhandenen Profile und die Build-Verwaltung unveraendert.
+* Zusaetzlichen, unnoetigen shared-Pfad aus mgu-repo.json entfernt,
+  damit er der frueher sichtbaren Konfiguration entspricht.
+
+WICHTIG: Sichtbarkeit auf dem echten MGU Store kann lokal NICHT garantiert
+werden. Falls Iconix Sounds nach Quelle aktualisieren/Check now noch fehlt,
+bitte Fehler-/Quellenansicht und die GitHub-Pfade kontrollieren. Es muss
+apps/iconix_sounds/app.json auf Branch main existieren, nicht als ZIP.
+
+ZIP auf PC ENTpacken. Nur den Inhalt in GitHub-Hauptverzeichnis hochladen.
+Falls vorher Dateien fehlen: lieber alle Dateien aus dem Vollpaket uebernehmen.
+
+B57-Profil und Audio-Dateien sind enthalten. Ton ueber BMW-Lautsprecher ist
+weiterhin experimentell und am Auto ungetestet.

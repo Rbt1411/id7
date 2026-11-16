@@ -1,7 +1,7 @@
 {
   "id": "iconix-audiod",
   "kind": "tool",
-  "version": "0.5.2-b57",
+  "version": "0.5.3",
   "title": "Iconix Audio",
   "description": "Iconix Audio mit Audiowiedergabe und BMW B57 540d Sport Sample-Profil (experimentell).",
   "mguHmi": [

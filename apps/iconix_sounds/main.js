@@ -19,7 +19,7 @@ const UI = require('./ui');
 const AudioLink = require('./audio_link');
 const VehicleFeed = require('./vehicle_feed');
 
-const VERSION = '0.5.2-b57';
+const VERSION = '0.5.3';
 const DEFAULTS = {
   enabled: true, profile: Profiles.DEFAULT, volume: 60, intensity: 70, pops: false, sport: false,
   muteParked: false, dialVolume: true, loadSource: 'auto', alsaDevice: 'auto', maxTorque: 400, carIdle: 800, carRedline: 4800
