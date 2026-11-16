@@ -409,10 +409,12 @@ Engine.prototype.test = function () {
 
 Engine.prototype.status = function () {
   const out = this.out;
+  const sampleError = this.synth.cfg.profile === 'b57_540d' && (!this.synth.b57 || !this.synth.b57.ok)
+    ? ((this.synth.b57 && this.synth.b57.error) || 'B57 Soundmod-Dateien fehlen') : null;
   return {
-    ok: !out.error,
+    ok: !out.error && !sampleError,
     backend: out.backend || (out.list[0] && !out.error ? out.list[0].name : null),
-    rate: RATE, playing: !!out.child, error: out.error, profile: this.synth.cfg.profile,
+    rate: RATE, playing: !!out.child, error: out.error || sampleError, profile: this.synth.cfg.profile,
     underruns: out.underruns || 0, late: this.late, leadMs: LEAD_MS,
     players: out.list.map(function (b) { return b.name; }),
     device: this.device, python: findPython(),
@@ -450,7 +452,7 @@ Engine.prototype._tick = function () {
     synth.stale = now - this.lastParams > STALE_MS;
   }
   // Testsound auch bei "Stumm" hörbar machen
-  const wantSound = (synth.cfg.enabled || testing) && (!synth.stale || testing);
+  const wantSound = (synth.cfg.enabled || testing) && (!synth.stale || testing) && !(synth.cfg.profile === 'b57_540d' && (!synth.b57 || !synth.b57.ok));
   if (testing && !synth.cfg.enabled) { synth.cfg.enabled = true; this._testUnmuted = true; }
   if (!testing && this._testUnmuted) { synth.cfg.enabled = false; this._testUnmuted = false; }
 

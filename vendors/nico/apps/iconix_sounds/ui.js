@@ -99,7 +99,7 @@
       var c = chipRect(i);
       var active = s.profiles[i].id === s.profile;
       g.rrect(c.x, c.y, c.w, c.h, c.r, active ? C.accent : C.panel);
-      g.text(s.profiles[i].name, c.x + c.w / 2, c.y + 32, 22, active ? '#ffffff' : C.dim, 'center', active);
+      g.text(s.profiles[i].name, c.x + c.w / 2, c.y + 32, s.profiles[i].name.length > 15 ? 16 : 22, active ? '#ffffff' : C.dim, 'center', active);
     }
 
     // ---- Lautstärke: [−] Balken [+], Antippen von "60 %"/"STUMM" schaltet stumm ----

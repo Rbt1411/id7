@@ -17,9 +17,9 @@
  *   - bei Stille wird gar nicht gerechnet
  */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory(require('./profiles'));
-  else root.IconixSynth = factory(root.IconixProfiles);
-})(typeof self !== 'undefined' ? self : this, function (Profiles) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./profiles'), require('./b57_samples'));
+  else root.IconixSynth = factory(root.IconixProfiles, null);
+})(typeof self !== 'undefined' ? self : this, function (Profiles, B57Samples) {
   'use strict';
 
   var TWO_PI = Math.PI * 2;
@@ -39,7 +39,7 @@
   // Profil für die schnelle Verarbeitung vorbereiten (einmal je Profil)
   function prepare(p) {
     if (p._prep) return p._prep;
-    var list = p.kind === 'electric' ? p.voices : p.harmonics;
+    var list = p.kind === 'electric' ? p.voices : (p.harmonics || []);
     var n = Math.min(list.length, MAXH), ord = new Float64Array(n), amp = new Float64Array(n), det = new Float64Array(n);
     var sum = 0, i;
     for (i = 0; i < n; i++) { ord[i] = list[i][0]; amp[i] = list[i][1]; det[i] = list[i][2] || 0; sum += amp[i]; }
@@ -92,6 +92,7 @@
     this.profile = Profiles.get(id);
     this.cfg.profile = this.profile.id;
     this.prep = prepare(this.profile);
+    if (this.profile.kind === 'sample' && B57Samples && !this.b57) this.b57 = new B57Samples(this.sr);
     var d = this.profile.drive || 1;
     this.drive = d;
     this.driveNorm = (1 + d) / d;
@@ -176,7 +177,12 @@
     var load = this.load, inten = c.intensity, nyq = sr * 0.45, i, fc;
     var inc = this.inc, w = this.w, n = P.n;
 
-    if (p.kind === 'electric') {
+    if (p.kind === 'sample') {
+      this.nActive = 0;
+      this.level = 0;
+      this.noiseAmt = 0;
+      fc = 200;
+    } else if (p.kind === 'electric') {
       var spd = this.speed;
       var f = p.baseHz * Math.pow(2, spd / p.octaveKmh);
       this.nActive = n;
@@ -355,6 +361,19 @@
    * Füllt `out` (Float32Array, Stereo interleaved, Länge >= frames*2) mit Samples in [-1, 1].
    * Gibt den Spitzenwert zurück.
    */
+  Synth.prototype._blockSample = function (out, off, n) {
+    if (!this.b57) {
+      var j = off * 2;
+      for (var i = 0; i < n; i++) { out[j++] = 0; out[j++] = 0; }
+      this.amp += this.ampStep * n;
+      return 0;
+    }
+    var r = this.b57.render(out, off, n, this.amp, this.ampStep, this.rpm, this.load,
+      this.target.overrun, this.cfg.intensity);
+    this.amp = r.amp;
+    return r.peak;
+  };
+
   Synth.prototype.render = function (out, frames) {
     var peak = 0, i = 0, n, pk;
     while (i < frames) {
@@ -364,7 +383,7 @@
         // Stille: nichts berechnen
         for (var z = i * 2, end = (i + n) * 2; z < end; z++) out[z] = 0;
       } else {
-        pk = this.profile.kind === 'electric' ? this._blockElec(out, i, n) : this._blockComb(out, i, n);
+        pk = this.profile.kind === 'sample' ? this._blockSample(out, i, n) : (this.profile.kind === 'electric' ? this._blockElec(out, i, n) : this._blockComb(out, i, n));
         if (pk > peak) peak = pk;
       }
       i += n;

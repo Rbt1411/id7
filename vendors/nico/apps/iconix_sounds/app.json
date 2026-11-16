@@ -1,12 +1,15 @@
 {
   "id": "iconix_sounds",
   "title": "Iconix Sounds",
-  "description": "Virtuelle Motor- und Elektro-Sounds abhängig von Drehzahl, Last und Geschwindigkeit, mit Profilen und Lautstärkeregelung. Die Tonausgabe übernimmt das Tool iconix-audiod (experimentell).",
-  "version": "0.5.0",
+  "description": "Iconix Sounds mit zusaetzlichem samplebasierten BMW B57 540d Sport-Profil (Aquaphobic Soundmod); experimentelle Wiedergabe via iconix-audiod.",
+  "version": "0.5.2-b57",
   "vendor": "custom",
   "loggingId": "ICXS",
   "iconGlyph": "engine",
-  "mguHmi": ["ID7", "ID8"],
+  "mguHmi": [
+    "ID7",
+    "ID8"
+  ],
   "autostart": true,
   "requires": {
     "idrive7-renderd": "2.1.15"
@@ -33,11 +36,26 @@
       "kind": "canvas",
       "title": "Iconix Sounds",
       "buttons": [
-        ["BTN_PROFILE", "Sound wechseln"],
-        ["BTN_MUTE", "Stumm / Ton an"],
-        ["BTN_TEST", "Testsound"],
-        ["BTN_DIAG", "Audio-Diagnose"],
-        ["BTN_SETTINGS", "Einstellungen"]
+        [
+          "BTN_PROFILE",
+          "Sound wechseln"
+        ],
+        [
+          "BTN_MUTE",
+          "Stumm / Ton an"
+        ],
+        [
+          "BTN_TEST",
+          "Testsound"
+        ],
+        [
+          "BTN_DIAG",
+          "Audio-Diagnose"
+        ],
+        [
+          "BTN_SETTINGS",
+          "Einstellungen"
+        ]
       ]
     }
   ],
@@ -54,13 +72,38 @@
       "type": "choice",
       "default": "subtle",
       "options": [
-        ["six", "Reihensechser Sport"],
-        ["v8", "V8 Bariton"],
-        ["subtle", "Sport Dezent"],
-        ["turbo4", "Turbo Vierzylinder"],
-        ["v10", "Racing V10"],
-        ["edrive", "Electric Drive"],
-        ["espace", "Electric Space"]
+        [
+          "six",
+          "Reihensechser Sport"
+        ],
+        [
+          "v8",
+          "V8 Bariton"
+        ],
+        [
+          "subtle",
+          "Sport Dezent"
+        ],
+        [
+          "turbo4",
+          "Turbo Vierzylinder"
+        ],
+        [
+          "v10",
+          "Racing V10"
+        ],
+        [
+          "edrive",
+          "Electric Drive"
+        ],
+        [
+          "espace",
+          "Electric Space"
+        ],
+        [
+          "b57_540d",
+          "BMW B57 540d Sport"
+        ]
       ]
     },
     {
@@ -69,27 +112,90 @@
       "type": "choice",
       "default": 60,
       "options": [
-        [0, "0 %"],
-        [5, "5 %"],
-        [10, "10 %"],
-        [15, "15 %"],
-        [20, "20 %"],
-        [25, "25 %"],
-        [30, "30 %"],
-        [35, "35 %"],
-        [40, "40 %"],
-        [45, "45 %"],
-        [50, "50 %"],
-        [55, "55 %"],
-        [60, "60 %"],
-        [65, "65 %"],
-        [70, "70 %"],
-        [75, "75 %"],
-        [80, "80 %"],
-        [85, "85 %"],
-        [90, "90 %"],
-        [95, "95 %"],
-        [100, "100 %"]
+        [
+          0,
+          "0 %"
+        ],
+        [
+          5,
+          "5 %"
+        ],
+        [
+          10,
+          "10 %"
+        ],
+        [
+          15,
+          "15 %"
+        ],
+        [
+          20,
+          "20 %"
+        ],
+        [
+          25,
+          "25 %"
+        ],
+        [
+          30,
+          "30 %"
+        ],
+        [
+          35,
+          "35 %"
+        ],
+        [
+          40,
+          "40 %"
+        ],
+        [
+          45,
+          "45 %"
+        ],
+        [
+          50,
+          "50 %"
+        ],
+        [
+          55,
+          "55 %"
+        ],
+        [
+          60,
+          "60 %"
+        ],
+        [
+          65,
+          "65 %"
+        ],
+        [
+          70,
+          "70 %"
+        ],
+        [
+          75,
+          "75 %"
+        ],
+        [
+          80,
+          "80 %"
+        ],
+        [
+          85,
+          "85 %"
+        ],
+        [
+          90,
+          "90 %"
+        ],
+        [
+          95,
+          "95 %"
+        ],
+        [
+          100,
+          "100 %"
+        ]
       ]
     },
     {
@@ -98,11 +204,26 @@
       "type": "choice",
       "default": 70,
       "options": [
-        [30, "Dezent"],
-        [50, "Mittel"],
-        [70, "Kraeftig"],
-        [90, "Stark"],
-        [100, "Maximal"]
+        [
+          30,
+          "Dezent"
+        ],
+        [
+          50,
+          "Mittel"
+        ],
+        [
+          70,
+          "Kraeftig"
+        ],
+        [
+          90,
+          "Stark"
+        ],
+        [
+          100,
+          "Maximal"
+        ]
       ]
     },
     {
@@ -134,7 +255,48 @@
       "label": "Ausgabegeraet",
       "type": "choice",
       "default": "auto",
-      "options": [["auto", "Automatisch"], ["default", "default"], ["plughw:0,0", "plughw:0,0"], ["plughw:0,1", "plughw:0,1"], ["scan1", "Geraet 1 (Diagnose)"], ["scan2", "Geraet 2 (Diagnose)"], ["scan3", "Geraet 3 (Diagnose)"], ["scan4", "Geraet 4 (Diagnose)"], ["scan5", "Geraet 5 (Diagnose)"], ["scan6", "Geraet 6 (Diagnose)"]]
+      "options": [
+        [
+          "auto",
+          "Automatisch"
+        ],
+        [
+          "default",
+          "default"
+        ],
+        [
+          "plughw:0,0",
+          "plughw:0,0"
+        ],
+        [
+          "plughw:0,1",
+          "plughw:0,1"
+        ],
+        [
+          "scan1",
+          "Geraet 1 (Diagnose)"
+        ],
+        [
+          "scan2",
+          "Geraet 2 (Diagnose)"
+        ],
+        [
+          "scan3",
+          "Geraet 3 (Diagnose)"
+        ],
+        [
+          "scan4",
+          "Geraet 4 (Diagnose)"
+        ],
+        [
+          "scan5",
+          "Geraet 5 (Diagnose)"
+        ],
+        [
+          "scan6",
+          "Geraet 6 (Diagnose)"
+        ]
+      ]
     },
     {
       "key": "loadSource",
@@ -142,10 +304,22 @@
       "type": "choice",
       "default": "auto",
       "options": [
-        ["auto", "Automatisch"],
-        ["torque", "Motormoment"],
-        ["pedal", "Gaspedal"],
-        ["rpm", "Drehzahlanstieg"]
+        [
+          "auto",
+          "Automatisch"
+        ],
+        [
+          "torque",
+          "Motormoment"
+        ],
+        [
+          "pedal",
+          "Gaspedal"
+        ],
+        [
+          "rpm",
+          "Drehzahlanstieg"
+        ]
       ]
     },
     {
@@ -154,13 +328,34 @@
       "type": "choice",
       "default": 400,
       "options": [
-        [250, "250 Nm"],
-        [300, "300 Nm"],
-        [350, "350 Nm"],
-        [400, "400 Nm (220d)"],
-        [450, "450 Nm"],
-        [500, "500 Nm"],
-        [700, "700 Nm"]
+        [
+          250,
+          "250 Nm"
+        ],
+        [
+          300,
+          "300 Nm"
+        ],
+        [
+          350,
+          "350 Nm"
+        ],
+        [
+          400,
+          "400 Nm (220d)"
+        ],
+        [
+          450,
+          "450 Nm"
+        ],
+        [
+          500,
+          "500 Nm"
+        ],
+        [
+          700,
+          "700 Nm"
+        ]
       ]
     },
     {
@@ -169,12 +364,30 @@
       "type": "choice",
       "default": 800,
       "options": [
-        [650, "650"],
-        [700, "700"],
-        [750, "750"],
-        [800, "800"],
-        [850, "850"],
-        [900, "900"]
+        [
+          650,
+          "650"
+        ],
+        [
+          700,
+          "700"
+        ],
+        [
+          750,
+          "750"
+        ],
+        [
+          800,
+          "800"
+        ],
+        [
+          850,
+          "850"
+        ],
+        [
+          900,
+          "900"
+        ]
       ]
     },
     {
@@ -183,13 +396,34 @@
       "type": "choice",
       "default": 4800,
       "options": [
-        [4200, "4200"],
-        [4500, "4500"],
-        [4800, "4800 (Diesel)"],
-        [5200, "5200"],
-        [6000, "6000"],
-        [6500, "6500"],
-        [7000, "7000"]
+        [
+          4200,
+          "4200"
+        ],
+        [
+          4500,
+          "4500"
+        ],
+        [
+          4800,
+          "4800 (Diesel)"
+        ],
+        [
+          5200,
+          "5200"
+        ],
+        [
+          6000,
+          "6000"
+        ],
+        [
+          6500,
+          "6500"
+        ],
+        [
+          7000,
+          "7000"
+        ]
       ]
     }
   ]

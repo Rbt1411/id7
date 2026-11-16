@@ -84,6 +84,11 @@
       baseHz: 73.4, octaveKmh: 70,
       voices: [[1, 1, 0], [1.5, 0.6, 0.004], [2, 0.5, -0.006], [3, 0.25, 0.003], [4, 0.15, -0.002]],
       sub: 0.4, cutoff: 1400, cutoffPerKmh: 16, lfoHz: 4.5, lfoDepth: 0.12, drive: 1.1
+    },
+    {
+      id: 'b57_540d', name: 'BMW B57 540d Sport', kind: 'sample',
+      cylinders: 6, idleRpm: 750, maxRpm: 4550, gain: 1.0,
+      harmonics: [], turbo: 0, popRate: 0
     }
   ];
 

@@ -1,28 +1,74 @@
 {
   "id": "iconix-audiod",
   "kind": "tool",
-  "version": "0.5.0",
+  "version": "0.5.2-b57",
   "title": "Iconix Audio",
-  "description": "Experimenteller Audio-Dienst für die App Iconix Sounds: erzeugt den Motor-Sound und gibt ihn über ein vorhandenes Abspielprogramm aus.",
-  "mguHmi": ["ID7", "ID8"],
+  "description": "Iconix Audio mit Audiowiedergabe und BMW B57 540d Sport Sample-Profil (experimentell).",
+  "mguHmi": [
+    "ID7",
+    "ID8"
+  ],
   "optional": true,
   "uninstallable": true,
   "files": [
-    { "path": "iconix-audiod.js", "mode": "0644" },
-    { "path": "engine.js", "mode": "0644" },
-    { "path": "iconix-audiod.sh", "mode": "0755" },
-    { "path": "synth.js", "mode": "0644" },
-    { "path": "profiles.js", "mode": "0644" },
-    { "path": "alsa_play.py", "mode": "0755" }
+    {
+      "path": "iconix-audiod.js",
+      "mode": "0644"
+    },
+    {
+      "path": "engine.js",
+      "mode": "0644"
+    },
+    {
+      "path": "iconix-audiod.sh",
+      "mode": "0755"
+    },
+    {
+      "path": "synth.js",
+      "mode": "0644"
+    },
+    {
+      "path": "profiles.js",
+      "mode": "0644"
+    },
+    {
+      "path": "alsa_play.py",
+      "mode": "0755"
+    },
+    {
+      "path": "b57_samples.js",
+      "mode": "0644"
+    },
+    {
+      "path": "b57_idle.wav",
+      "mode": "0644"
+    },
+    {
+      "path": "b57_accel.wav",
+      "mode": "0644"
+    },
+    {
+      "path": "b57_decel.wav",
+      "mode": "0644"
+    }
   ],
   "units": [
-    { "name": "iconix-audiod.service" }
+    {
+      "name": "iconix-audiod.service"
+    }
   ],
   "enable": [
-    { "unit": "iconix-audiod.service", "target": "oapcontroller.service" }
+    {
+      "unit": "iconix-audiod.service",
+      "target": "oapcontroller.service"
+    }
   ],
   "dropins": [],
-  "recmgr": ["iconix-audiod"],
-  "restart": ["iconix-audiod.service"],
+  "recmgr": [
+    "iconix-audiod"
+  ],
+  "restart": [
+    "iconix-audiod.service"
+  ],
   "keepRunning": true
 }
