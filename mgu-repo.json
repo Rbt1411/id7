@@ -20,14 +20,15 @@
         "vendors/bmrmodz/apps",
         "vendors/nico/kit",
         "vendors/nico/apps",
-        "vendors/nico/tools/iconix-audiod"
+        "vendors/nico/tools/iconix-audiod",
+        "tools/iconix-audiod"
       ]
     }
   },
   "tools": [
     {
       "id": "iconix-audiod",
-      "path": "vendors/nico/tools/iconix-audiod",
+      "path": "tools/iconix-audiod",
       "title": "Iconix Audio",
       "description": "Experimenteller Audio-Dienst für Iconix Sounds",
       "optional": true,
