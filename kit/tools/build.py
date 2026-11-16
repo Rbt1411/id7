@@ -2,10 +2,10 @@
 """Dispatch builds to each upstream project's own compatible build kit."""
 import os,sys,pathlib,subprocess,shutil
 ROOT=pathlib.Path(__file__).resolve().parents[2]
-VENDOR={'dpf':'bmrmodz','spritmonitor':'bmrmodz','iconix_sounds':'nico'}
+VENDOR={'dpf':'bmrmodz','spritmonitor':'bmrmodz','iconix_sounds':'nico','drive_coach':'nico'}
 def main():
     if len(sys.argv)<2 or sys.argv[1] not in VENDOR:
-        sys.exit('Specify app ID: dpf, spritmonitor, iconix_sounds')
+        sys.exit('Specify app ID: dpf, spritmonitor, iconix_sounds, drive_coach')
     app=sys.argv[1]; root=ROOT/'vendors'/VENDOR[app]
     sdk=ROOT/'oap-sdk'
     vendor_sdk=root/'oap-sdk'
