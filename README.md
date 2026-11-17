@@ -8,8 +8,8 @@ Dieses ZIP basiert auf der hochgeladenen `id7-main(1).zip`.
 
 ## Enthalten
 
-- Particulate filter (DPF ID7) 0.2.0
-- Iconix Sounds 0.5.3 mit allen sieben bisherigen Profilen und zusätzlichem **BMW B57 540d Sport**
+- Particulate filter (DPF ID7) 0.1.1
+- Iconix Sounds 0.5.3 mit allen sieben Profilen und zusätzlichem **BMW B57 540d Sport**
 - Iconix Audio-Dienst 0.5.3 mit den drei lokalen B57-WAV-Aufnahmen (Leerlauf, Gas, Schub)
 
 ## Reparatur der fehlenden dist/*.tgz Dateien
