@@ -14,12 +14,12 @@ import sys
 import tarfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[2]
-VENDOR = {'dpf': 'bmrmodz', 'iconix_sounds': 'nico', 'smartx_audio_test': 'nico'}
+VENDOR = {'dpf': 'dpf_core', 'iconix_sounds': 'iconix_core'}
 
 
 def main():
     if len(sys.argv) < 2 or sys.argv[1] not in VENDOR:
-        sys.exit('Usage: python kit/tools/build.py <dpf|iconix_sounds|smartx_audio_test> [--preview-only]')
+        sys.exit('Usage: python kit/tools/build.py <dpf|iconix_sounds> [--preview-only]')
     app = sys.argv[1]
     root = ROOT / 'vendors' / VENDOR[app]
     spec = json.loads((ROOT / 'apps' / app / 'app.json').read_text(encoding='utf-8'))

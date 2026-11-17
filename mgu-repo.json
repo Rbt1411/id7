@@ -16,13 +16,12 @@
       "output": "dist/{id}@{version}.tgz",
       "shared": [
         "kit/tools/build.py",
-        "vendors/bmrmodz/kit",
-        "vendors/bmrmodz/apps",
-        "vendors/nico/kit",
-        "vendors/nico/apps",
-        "vendors/nico/tools/iconix-audiod",
-        "tools/iconix-audiod",
-        "tools/smartx-testd"
+        "vendors/dpf_core/kit",
+        "vendors/dpf_core/apps",
+        "vendors/iconix_core/kit",
+        "vendors/iconix_core/apps",
+        "vendors/iconix_core/tools/iconix-audiod",
+        "tools/iconix-audiod"
       ]
     }
   },
@@ -32,17 +31,6 @@
       "path": "tools/iconix-audiod",
       "title": "Iconix Audio",
       "description": "Experimenteller Audio-Dienst für Iconix Sounds",
-      "optional": true,
-      "uninstallable": true,
-      "mguHmi": [
-        "ID7"
-      ]
-    },
-    {
-      "id": "smartx-testd",
-      "path": "tools/smartx-testd",
-      "title": "SmartX Testdienst",
-      "description": "Separates optionales Tool fuer einen kurzen SmartX-Testton",
       "optional": true,
       "uninstallable": true,
       "mguHmi": [

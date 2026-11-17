@@ -1,43 +1,30 @@
-## Iconix Sounds 0.5.3 — Anzeige im MGU Store
+# RT-APPS · BMW iDrive 7
 
-Die App liegt unter `apps/iconix_sounds/app.json`. Im MGU Store die GitHub-Quelle `Rbt1411/id7` mit Branch `main` aktualisieren. Soundausgabe ueber MGU-Lautsprecher ungetestet.
+Eigene Zusammenstellung und Weiterentwicklung von Anwendungen fuer BMW MGU / iDrive 7.
 
-# Rbt1411 / id7 – korrigierter MGU-Store-Build + B57 Sport
+## Verfuegbare Anwendungen
 
-Dieses ZIP basiert auf der hochgeladenen `id7-main(1).zip`.
+| App | Version | Zweck |
+| --- | --- | --- |
+| **DPF Monitor** | **0.1.1** | Partikelfilter: Messwerte, Regenerationsdaten und Verlauf |
+| **Iconix Sounds** | **0.5.3** | Experimentelle Soundprofile fuer das Infotainment |
 
-## Enthalten
+**Hinweis zum Betrieb:** Nicht alle Messwerte und nicht die Soundausgabe sind fuer jedes Fahrzeug verifiziert. Kein Ersatz fuer Fahrzeugdiagnose. Bitte nur im Stand konfigurieren und testen.
 
-- Particulate filter (DPF ID7) 0.1.1
-- Iconix Sounds 0.5.3 mit allen sieben Profilen und zusätzlichem **BMW B57 540d Sport**
-- Iconix Audio-Dienst 0.5.3 mit den drei lokalen B57-WAV-Aufnahmen (Leerlauf, Gas, Schub)
+## MGU Store
 
-## Reparatur der fehlenden dist/*.tgz Dateien
+- Quelle: `Rbt1411/id7`
+- Branch: `main`
+- App-Katalog: `mgu-repo.json`
+- App-Quellen: `apps/dpf/` und `apps/iconix_sounds/`
+- Optionaler Audio-Dienst: `tools/iconix-audiod/`
 
-`kit/tools/build.py` ruft die projektspezifischen Build-Skripte auf und legt deren Ergebnis
-auch im Repo-Hauptordner unter `dist/<app>@<version>.tgz` ab. Es überprüft das Archiv.
-`vendors/nico/kit/tools/build.py` unterstützt nun Store-Builds mit `MGU_OUT`
-ohne lokal mitgelieferte BMW-SDK-Dateien und übernimmt die WAV-Dateien in die App.
-Alle Apps verwenden den gleichen Ausgabeweg.
+`kit/tools/build.py` baut die App-Pakete. Die zugehoerigen technischen Bibliotheken liegen unter `vendors/dpf_core/` und `vendors/iconix_core/`.
 
-## GitHub
+Nach einem GitHub-Commit die Quelle im MGU Store aktualisieren. Eine automatische Installation von Updates ist nicht zugesichert.
 
-**Nur den Inhalt** dieser ZIP in das **Stammverzeichnis** des GitHub-Repositories
-hochladen, sodass `mgu-repo.json` direkt auf der Repo-Hauptseite liegt.
-Keine zweite Unterebene `id7-main/` anlegen und die ZIP nicht als einzelne Datei hochladen.
-Mit einem neuen Commit erneut im MGU Store aktualisieren (ggf. Quelle neu laden).
+## Entwicklung und Rechte
 
-## Validierung und Grenzen
+RT-APPS ist die Bezeichnung dieser angepassten Projektzusammenstellung. Darin enthaltene Drittanbieter-Bibliotheken und uebernommene Programmteile bleiben Werke ihrer jeweiligen Urheber. Die Copyright- und Lizenztexte stehen weiterhin in den Quellordnern und sind in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) zusammengefasst.
 
-`python3 tests/check_repo.py` kontrolliert die Dateien und das Build-Verhalten.
-Mit `MGU_OUT=<temporärer Ordner> python3 kit/tools/build.py <app>` erstellt das
-jeweilige Skript einen Store-kompatiblen Quellpaket-Tarball. Ein Build
-mit dem **echten BMW-SDK**, eine Installation auf dem MGU und die Audioausgabe
-über die serienmäßigen BMW-Lautsprecher sind hier nicht nachgewiesen.
-
-Zum Sound: In Iconix Sounds das Profil „BMW B57 540d Sport“ wählen.
-Iconix Audio ist ein separates experimentelles Tool und muss zusätzlich
-installiert sein. Zuerst im Stand bei niedriger Lautstärke testen.
-
-Die B57-Audiodaten stammen aus dem vom Nutzer bereitgestellten Aquaphobic-Modpaket;
-Verbreitungsrechte für ein öffentliches Repository sind nicht geklärt.
+**Hinweis zur Weitergabe:** Fuer die mitgelieferten B57-Sounddateien sind die oeffentlichen Verbreitungsrechte noch nicht geklaert. Vor einer oeffentlichen Veroeffentlichung die Rechte pruefen oder die betreffenden Dateien herausnehmen.
