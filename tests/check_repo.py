@@ -3,9 +3,9 @@ import json, pathlib, sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 manifest=json.loads((ROOT/'mgu-repo.json').read_text())
 assert manifest['apps']['build']['output']=='dist/{id}@{version}.tgz'
-for app in ('dpf','spritmonitor','iconix_sounds','drive_coach'):
+for app in ('dpf','iconix_sounds'):
     root_spec=json.loads((ROOT/'apps'/app/'app.json').read_text())
-    vendor=('bmrmodz' if app in ('dpf','spritmonitor') else 'nico')
+    vendor=('bmrmodz' if app == 'dpf' else 'nico')
     vendor_spec=json.loads((ROOT/'vendors'/vendor/'apps'/app/'app.json').read_text())
     assert root_spec['id']==app and root_spec['version']==vendor_spec['version'], app
     assert (ROOT/'apps'/app/'icon.png').exists()

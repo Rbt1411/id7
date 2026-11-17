@@ -1,0 +1,57 @@
+{
+  "id": "smartx_audio_test",
+  "title": "SmartX Audio Test",
+  "description": "Diagnose: kurzer, leiser Testton ueber SmartX/CarLife; nur bei stehendem Fahrzeug. Experimentell, kein B57-Dauersound.",
+  "version": "0.1.0",
+  "vendor": "custom",
+  "loggingId": "SXT1",
+  "iconGlyph": "sound",
+  "mguHmi": [
+    "ID7"
+  ],
+  "autostart": false,
+  "requires": {
+    "idrive7-renderd": "2.1.15",
+    "smartx-testd": "0.1.0"
+  },
+  "signals": {
+    "de.bmw.infotainment.vehicle.Vehicle2": {
+      "statusCarSpeed2": "rs"
+    },
+    "org.genivi.am.commandinterface.CommandControl": {
+      "_instances": "1",
+      "_methods": [
+        "connect",
+        "disconnect",
+        "getListMainConnections"
+      ]
+    },
+    "org.genivi.am.routinginterface.RoutingControlObserver": {
+      "_instances": "1",
+      "_methods": [
+        "hookSourceAvailablityStatusChange"
+      ]
+    }
+  },
+  "screens": [
+    {
+      "name": "MAIN",
+      "kind": "canvas",
+      "title": "SmartX Audio Test",
+      "buttons": [
+        [
+          "BTN_TEST",
+          "Testton (nur im Stand)"
+        ],
+        [
+          "BTN_STOP",
+          "Stop / Audio freigeben"
+        ],
+        [
+          "BTN_CHECK",
+          "Dienst pruefen"
+        ]
+      ]
+    }
+  ]
+}

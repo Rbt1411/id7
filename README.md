@@ -8,7 +8,7 @@ Dieses ZIP basiert auf der hochgeladenen `id7-main(1).zip`.
 
 ## Enthalten
 
-- DPF Status 0.1.25, Spritmonitor 0.1.24, Drive Coach 1.0.1
+- Particulate filter (DPF ID7) 0.2.0
 - Iconix Sounds 0.5.3 mit allen sieben bisherigen Profilen und zusätzlichem **BMW B57 540d Sport**
 - Iconix Audio-Dienst 0.5.3 mit den drei lokalen B57-WAV-Aufnahmen (Leerlauf, Gas, Schub)
 
