@@ -9,3 +9,5 @@ Dieses Repository wird unter dem Projektnamen **RT-APPS** gepflegt. Der Name bez
 - **Iconix-B57-Audio:** WAV-Dateien aus einem Aquaphobic-Modpaket. Fuer eine oeffentliche Weitergabe sind die Rechte nicht ausreichend nachgewiesen; sie sollten vor einer Veroeffentlichung separat geklaert oder entfernt werden.
 
 Die Root-Datei `LICENSE` bezeichnet das Repository. Sie hebt keine fremden Copyrights auf und ersetzt keine Lizenzbedingungen der einzelnen Bestandteile. Historische Git-Autorendaten werden nicht gefaelscht oder geloescht.
+
+- **SmartX-AudioManager-Route:** `apps/iconix_sounds/smartx_route.js` enthaelt abgeleiteten Code aus aurelmarius/bmw-apps und Moonride. GPL-3.0-or-later-Herkunft; gesonderte Hinweise unter `apps/iconix_sounds/SMARTX_LICENSE_NOTICE.md`.

@@ -3,7 +3,7 @@ import json, pathlib, sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 manifest=json.loads((ROOT/'mgu-repo.json').read_text())
 assert manifest['apps']['build']['output']=='dist/{id}@{version}.tgz'
-for app in ('dpf','iconix_sounds'):
+for app in ('dpf','iconix_sounds','smartx_audio_test'):
     root_spec=json.loads((ROOT/'apps'/app/'app.json').read_text())
     vendor=('dpf_core' if app == 'dpf' else 'iconix_core')
     vendor_spec=json.loads((ROOT/'vendors'/vendor/'apps'/app/'app.json').read_text())
@@ -15,8 +15,9 @@ for root in ('tools/iconix-audiod','vendors/iconix_core/tools/iconix-audiod'):
     config=json.loads((t/'component.json').read_text())
     for f in config['files']:
         assert (t/f['path']).is_file(),str(t/f['path'])
-    assert config['version']=='0.5.3'
+    assert config['version']=='0.5.4'
     print('TOOL OK',root)
+assert (ROOT/'tools/smartx-testd/component.json').is_file(), 'SmartX Testdienst fehlt'
 prof=json.loads((ROOT/'apps/iconix_sounds/app.json').read_text())
 assert any(p[0]=='b57_540d' for x in prof['settings'] if x['key']=='profile' for p in x['options'])
 print('ALL REPO STRUCTURE CHECKS PASSED')

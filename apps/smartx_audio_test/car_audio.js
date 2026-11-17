@@ -51,7 +51,7 @@ function createCarAudio(signals, log, opts) {
     };
     /** unavailable again, only when nothing but ours (just disconnected, maybe still listed) is on 287 */
     async function release(ours) {
-        const left = (await on287().catch(() => [])).filter((c) => c.mainConnectionID !== ours);
+        const left = (await on287()).filter((c) => c.mainConnectionID !== ours);
         if (left.length) { log.info('car audio: 287 in use again (' + left.map((c) => c.mainConnectionID).join(', ') + '): left available'); return; }
         await avail(false);
     }
@@ -75,27 +75,40 @@ function createCarAudio(signals, log, opts) {
         const id = saved();
         if (id == null) { save(null); return; }   // none, or one from before a restart: forgotten, never disconnected
         if ((await on287()).some((c) => c.mainConnectionID === id)) {
-            log.info('car audio: our leftover ' + id + ' ' + JSON.stringify(await signals.call(am.p, 'disconnect', { mainConnectionID: id })));
+            const response=await signals.call(am.p, 'disconnect', { mainConnectionID: id });
+            log.info('car audio: leftover disconnect '+id+' '+JSON.stringify(response));
+            if ((await on287()).some((c)=>c.mainConnectionID === id)) {
+                am.id=id; am.connected=true;
+                throw Error('Alte eigene Verbindung '+id+' noch aktiv; keine zweite Verbindung aufbauen');
+            }
             await release(id);
         }
         save(null);
     }
     async function ready() {
-        if (am.p) return;
-        am.p = await proxy(AM);
-        am.r = await proxy(AMR);
+        if (am.p && am.r) return;
+        // Only publish ready proxies after BOTH interfaces were acquired.
+        const p = await proxy(AM);
+        const r = await proxy(AMR);
+        am.p=p; am.r=r;
         await leftover().catch((e) => log.warn('car audio leftover: ' + e));
     }
     am.q = am.q.then(ready).catch((e) => { am.error = String(e); log.warn('car audio start: ' + e); });
 
     function want(on) {
         // while another app holds 287, look again every few seconds: once it is free, the sound goes on
-        if (on === am.on && !(on && am.taken && Date.now() - am.checked >= 3000)) return;
+        if (on === am.on && !(on && (!am.connected || am.taken) && Date.now() - am.checked >= 3000) && !( !on && am.id != null)) return am.q;
         am.on = on;
         am.checked = Date.now();
         am.q = am.q.then(async () => {
             await ready();
             if (on) {
+                am.error=null;
+                if (am.id != null) {
+                    const ours=(await on287()).some((c)=>c.mainConnectionID === am.id);
+                    if (ours) { am.connected=true; am.error='Eigene alte Verbindung '+am.id+' noch aktiv. STOP zur Freigabe.'; return; }
+                    am.id=null; save(null); am.connected=false;
+                }
                 // another app's sound on 287 (myAirPlay, Emby): not ours to take or to end
                 const other = (await on287()).filter((c) => c.mainConnectionID !== am.id);
                 if (other.length) {
@@ -115,18 +128,28 @@ function createCarAudio(signals, log, opts) {
                 if (!ok) await release(null);
             } else {
                 am.taken = false;
-                if (am.id == null) { am.connected = false; return; }
-                const was = am.id;
-                log.info('car audio: disconnect ' + JSON.stringify(await signals.call(am.p, 'disconnect', { mainConnectionID: am.id })));
-                am.id = null;
+                if (am.id == null) { am.connected = false; am.error=null; return; }
+                const was=am.id;
+                const response=await signals.call(am.p, 'disconnect', { mainConnectionID: was });
+                log.info('car audio: disconnect '+was+' '+JSON.stringify(response));
+                // A successful API reply does not necessarily mean that the connection disappeared.
+                // Keep our saved connection ID if it remains, to avoid taking somebody else's route.
+                const stillOwn=(await on287()).some((c)=>c.mainConnectionID === was);
+                if (stillOwn) {
+                    am.connected=true;
+                    am.error='Eigene AudioManager-Verbindung '+was+' bleibt aktiv nach disconnect';
+                    return;
+                }
+                am.id=null;
                 save(null);
-                am.connected = false;
+                am.connected=false;
+                am.error=null;
                 await release(was);
             }
         }).catch((e) => { am.error = String(e); log.warn('car audio: ' + e); });
         return am.q; // Allow one-shot test to await routing and then release.
     }
-    return { want, state: () => ({ on: am.on, connected: am.connected, error: am.error, taken: am.taken }) };
+    return { want, state: () => ({ on: am.on, connected: am.connected, error: am.error, taken: am.taken, id: am.id }) };
 }
 
 module.exports = { createCarAudio, SRC, SINK };

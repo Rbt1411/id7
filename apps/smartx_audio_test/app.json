@@ -1,8 +1,8 @@
 {
   "id": "smartx_audio_test",
   "title": "SmartX Audio Test",
-  "description": "Diagnose: kurzer, leiser Testton ueber SmartX/CarLife; nur bei stehendem Fahrzeug. Experimentell, kein B57-Dauersound.",
-  "version": "0.1.0",
+  "description": "Kurzer SmartX-Testton, zweistufige manuelle Standbestaetigung bei fehlendem BMW-Temposignal; Audio-Routen-Diagnose.",
+  "version": "0.1.2",
   "vendor": "custom",
   "loggingId": "SXT1",
   "iconGlyph": "sound",
@@ -39,6 +39,10 @@
       "kind": "canvas",
       "title": "SmartX Audio Test",
       "buttons": [
+        [
+          "BTN_ARM",
+          "Stillstand bestaetigen"
+        ],
         [
           "BTN_TEST",
           "Testton (nur im Stand)"

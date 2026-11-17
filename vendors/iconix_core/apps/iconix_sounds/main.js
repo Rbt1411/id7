@@ -18,11 +18,13 @@ const Profiles = require('./profiles');
 const UI = require('./ui');
 const AudioLink = require('./audio_link');
 const VehicleFeed = require('./vehicle_feed');
+const { createCarAudio } = require('./smartx_route');
+const path = require('path');
 
-const VERSION = '0.5.3';
+const VERSION = '0.5.4';
 const DEFAULTS = {
   enabled: true, profile: Profiles.DEFAULT, volume: 60, intensity: 70, pops: false, sport: false,
-  muteParked: false, dialVolume: true, loadSource: 'auto', alsaDevice: 'auto', maxTorque: 400, carIdle: 800, carRedline: 4800
+  muteParked: false, dialVolume: true, loadSource: 'auto', alsaDevice: 'auto', smartxContinuous: false, maxTorque: 400, carIdle: 800, carRedline: 4800
 };
 
 function setting(settings, key) {
@@ -47,6 +49,7 @@ function startCore(host) {
   // Einstellungen werden nur bei Änderungen gelesen und dann zwischengespeichert –
   // nicht in jedem Frame bzw. bei jedem Drehzahl-Update.
   let parkedMute = false;
+  let smartxRouteError = null;
   let last = null;
   let feedCfg = null, synthCfgCache = null, uiCfg = null;
 
@@ -73,9 +76,68 @@ function startCore(host) {
   refresh();
 
   const link = new AudioLink(log, VERSION);
+  const carAudio = createCarAudio(host.signals, log, {
+    file: host.dataDir ? path.join(host.dataDir, 'iconix-smartx-route.json') : null
+  });
+  let previewUntil = 0, previewPending = false, routeBusy = false, routeTimer = null;
+  let routeGranted = false, lastRouteError = null;
+  function selected() { return synthCfgCache.device === 'smartx'; }
+  function validRpm() { return !!(last && Date.now() - last.at < 1800 && last.rpm >= 400); }
+  function wantsRoute() {
+    return selected() && ((previewUntil > Date.now()) || (bool(setting(settings,'smartxContinuous')) && synthCfgCache.enabled && validRpm()));
+  }
+  async function routeTick() {
+    if (routeBusy) return;
+    routeBusy = true;
+    try {
+      if (previewUntil && Date.now() > previewUntil) { previewUntil = 0; previewPending = false; }
+      if (!wantsRoute() || !link.connected) {
+        // Always stop PCM BEFORE releasing the BMW route.
+        link.route(false);
+        routeGranted = false;
+        await carAudio.want(false);
+        return;
+      }
+      await carAudio.want(true);
+      const st = carAudio.state();
+      if (!st.connected || st.error) {
+        link.route(false);
+        routeGranted = false;
+        lastRouteError = st.taken ? 'CarLife 287 wird von anderer App genutzt' : (st.error || 'AudioManager nicht verbunden');
+        return;
+      }
+      lastRouteError = null;
+      routeGranted = true;
+      // A short lease prevents audio continuing after the app crashes/unloads.
+      link.route(true);
+      if (previewPending) {
+        previewPending = false;
+        previewUntil = Date.now() + 10500; // full test window starts when route is ready
+        link.test(); // play B57/selected profile only AFTER route reports connected
+      }
+    } catch (e) {
+      link.route(false);
+      routeGranted = false;
+      lastRouteError = String(e && e.message || e);
+      log.warn('iconix: SmartX routing: ' + lastRouteError);
+    } finally { routeBusy = false; }
+  }
+  function stopSound() {
+    previewUntil = 0; previewPending = false;
+    link.stopTest(); link.route(false);
+    routeTick();
+  }
+  function testSound() {
+    if (!selected()) { link.test(); return; }
+    if (!link.connected) { lastRouteError = 'Iconix Audio muss installiert und verbunden sein'; return; }
+    previewPending = true;
+    previewUntil = Date.now() + 20000; // allow first AudioManager proxy to initialize
+    routeTick();
+  }
+  routeTimer = setInterval(routeTick, 600);
   const feed = new VehicleFeed(host.signals, log, () => feedCfg);
   const synthCfg = () => synthCfgCache;
-  const pushCfg = () => { refresh(); link.configure(synthCfgCache); };
+  const pushCfg = () => { refresh(); link.configure(synthCfgCache); if (synthCfgCache.device !== 'smartx' || !synthCfgCache.enabled) { stopSound(); } };
 
   feed.on('sample', s => {
     last = s;
@@ -89,7 +151,8 @@ function startCore(host) {
   feed.start();
   log.info('iconix: Kern gestartet, Version ' + VERSION);
 
-  core = { link, feed, pushCfg, synthCfg, ui: () => uiCfg, log, last: () => last };
+  core = { link, feed, pushCfg, synthCfg, ui: () => uiCfg, log, last: () => last, testSound, stopSound,
+    smartxStatus: () => ({ selected: selected(), granted: routeGranted, error: lastRouteError, preview: Date.now() < previewUntil }) }; 
   return core;
 }
 
@@ -175,7 +238,10 @@ mgu.run({
     // Buttons aus app.json
     ctx.ui.onClick('BTN_PROFILE', nextProfile);
     ctx.ui.onClick('BTN_MUTE', () => set('enabled', !bool(get('enabled'))));
-    ctx.ui.onClick('BTN_TEST', () => c.link.test());
+    ctx.ui.onClick('BTN_STOP_SMARTX', () => {
+      set('smartxContinuous', false); set('enabled', false); c.stopSound();
+    });
+    ctx.ui.onClick('BTN_TEST', () => c.testSound());
     // Audio-Diagnose: zeigt, welche Tonwege es auf diesem Head Unit gibt (an-/ausschalten)
     let diag = null;
     const openDiag = () => { diag = { lines: c.link.diagnose(), page: 0 }; };
@@ -243,6 +309,9 @@ mgu.run({
       st.redline = cfg.carRedline; st.volume = cfg.volume; st.enabled = cfg.enabled;
       st.sport = cfg.sport; st.pops = cfg.pops; st.demo = !s;
       st.audio = c.link.status;
+      const sx = c.smartxStatus();
+      if (sx.selected && sx.error) st.audio = { ok: false, text: 'SmartX: ' + sx.error };
+      else if (sx.selected && !sx.granted) st.audio = { ok: false, text: 'SmartX: Bereit / Testsound oder Dauerbetrieb aktivieren' };
       st.hint = own ? HINT_TOUCH : (c.ui().dialVolume ? HINT_DIAL : '');
       st.diag = diag;
       UI.draw(g, st);

@@ -31,7 +31,7 @@ const Synth = require('./synth');
 const Profiles = require('./profiles');
 const E = require('./engine');
 
-const VERSION = '0.5.3';
+const VERSION = '0.5.4';
 const SOCKETS = process.env.ICONIX_AUDIOD_SOCKET
   ? [process.env.ICONIX_AUDIOD_SOCKET]
   : ['/run/iconix-audiod/audiod.sock', '/tmp/iconix-audiod.sock'];
@@ -87,7 +87,9 @@ function runDaemon() {
     if (!m || typeof m !== 'object') return;
     if (m.op === 'params') engine.params(m);
     else if (m.op === 'config') { engine.configure(m.cfg); }
+    else if (m.op === 'route') { engine.routeLease(m.granted === true); }
     else if (m.op === 'test') { log('Testsound'); engine.test(); }
+    else if (m.op === 'stoptest') { engine.stopTest(); }
     else if (m.op === 'scan') { log('ALSA-Scan'); engine.scanDevices(function () { broadcast(false); }); }
     else if (m.op === 'testdevices') { log('Gerätetest'); engine.testDevices(); }
     else if (m.op === 'hello') log('App verbunden: ' + m.id + ' ' + m.version);

@@ -113,9 +113,13 @@ class AudioLink extends EventEmitter {
 
   configure(cfg) {
     this.cfg = cfg;
+    if (cfg.device === 'smartx' && this.local) this._stopLocal('SmartX erfordert Audio-Dienst');
     this.send({ op: 'config', cfg: cfg });
     if (this.local) this.local.configure(cfg);
   }
+
+  route(granted) { return this.send({ op: 'route', granted: granted === true }); }
+  stopTest() { return this.send({ op: 'stoptest' }); }
 
   params(sample) { this.latest = sample; }
 
@@ -170,7 +174,7 @@ class AudioLink extends EventEmitter {
     const p = this.latest;
     const now = Date.now();
     // Rückfall starten, wenn der Dienst zu lange fehlt
-    if (!this.connected && !this.local && this.fallback && now - this.startedAt > FALLBACK_MS) this._startLocal();
+    if (!this.connected && !this.local && this.fallback && !(this.cfg && this.cfg.device === 'smartx') && now - this.startedAt > FALLBACK_MS) this._startLocal();
     if (!p || now - p.at > STALE_MS) return;
     const rpm = Math.round(p.rpm), load = Math.round(p.load * 1000) / 1000, speed = Math.round(p.speed * 10) / 10;
     const msg = { op: 'params', rpm: rpm, load: load, speed: speed, overrun: p.overrun };
@@ -233,6 +237,7 @@ class AudioLink extends EventEmitter {
 
   _describe(m, prefix) {
     if (m.devTest) return { ok: true, text: 'Gerätetest ' + m.devTest.i + '/' + m.devTest.n + ': ' + m.devTest.device + ' – hörst du etwas?' };
+    if (m.device === 'smartx' && m.smartxRoute === false) return { ok: false, text: 'SmartX: wartet auf AudioManager-Verbindung' };
     if (m.error) return { ok: false, text: prefix + m.error };
     let text = prefix + (m.backend || '?') + ' · ' + khz(m.rate) + ' kHz' + (m.playing ? ' · spielt' : ' · bereit');
     // Aussetzer (Underruns des Abspielprogramms + verspätete Wakeups) sichtbar machen

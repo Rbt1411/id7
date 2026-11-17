@@ -1,8 +1,8 @@
 {
   "id": "iconix_sounds",
   "title": "Iconix Sounds",
-  "description": "Iconix Sounds mit zusaetzlichem samplebasierten BMW B57 540d Sport-Profil (Aquaphobic Soundmod); experimentelle Wiedergabe via iconix-audiod.",
-  "version": "0.5.3",
+  "description": "Iconix Sounds mit BMW B57 Sampleprofil und optionalem SmartX/CarLife-Audio (Beta; getrennt von BMW-Medienaudio; Test im Stand).",
+  "version": "0.5.4",
   "vendor": "custom",
   "loggingId": "ICXS",
   "iconGlyph": "engine",
@@ -28,6 +28,20 @@
     "de.bmw.powertrain.AcceleratorPedal": {
       "AngleAcceleratorPedal": "s",
       "_optional": "Gaspedal als Lastquelle (Skalierung unbestätigt)"
+    },
+    "org.genivi.am.commandinterface.CommandControl": {
+      "_instances": "1",
+      "_methods": [
+        "connect",
+        "disconnect",
+        "getListMainConnections"
+      ]
+    },
+    "org.genivi.am.routinginterface.RoutingControlObserver": {
+      "_instances": "1",
+      "_methods": [
+        "hookSourceAvailablityStatusChange"
+      ]
     }
   },
   "screens": [
@@ -55,6 +69,10 @@
         [
           "BTN_SETTINGS",
           "Einstellungen"
+        ],
+        [
+          "BTN_STOP_SMARTX",
+          "SmartX sofort stoppen"
         ]
       ]
     }
@@ -261,6 +279,10 @@
           "Automatisch"
         ],
         [
+          "smartx",
+          "SmartX / CarLife (Beta)"
+        ],
+        [
           "default",
           "default"
         ],
@@ -425,6 +447,12 @@
           "7000"
         ]
       ]
+    },
+    {
+      "key": "smartxContinuous",
+      "label": "SmartX Dauerbetrieb (Beta; nach Test)",
+      "type": "bool",
+      "default": false
     }
   ]
 }

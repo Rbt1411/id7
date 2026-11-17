@@ -21,7 +21,9 @@
         "vendors/iconix_core/kit",
         "vendors/iconix_core/apps",
         "vendors/iconix_core/tools/iconix-audiod",
-        "tools/iconix-audiod"
+        "tools/iconix-audiod",
+        "vendors/iconix_core/apps/smartx_audio_test",
+        "tools/smartx-testd"
       ]
     }
   },
@@ -31,6 +33,17 @@
       "path": "tools/iconix-audiod",
       "title": "Iconix Audio",
       "description": "Experimenteller Audio-Dienst für Iconix Sounds",
+      "optional": true,
+      "uninstallable": true,
+      "mguHmi": [
+        "ID7"
+      ]
+    },
+    {
+      "id": "smartx-testd",
+      "path": "tools/smartx-testd",
+      "title": "SmartX Testdienst",
+      "description": "Ein-Sekunden-Testton (separate Diagnose-App)",
       "optional": true,
       "uninstallable": true,
       "mguHmi": [

@@ -17,7 +17,7 @@ const path = require('path');
 const cp = require('child_process');
 const Synth = require('./synth');
 
-const RATE = Number(process.env.ICONIX_RATE) || 44100;
+const RATE = Number(process.env.ICONIX_RATE) || 48000; // SmartX CarLife media uses 48 kHz
 const TICK_MS = 20;          // 50 Wakeups/s (Blöcke à 882 Samples) – schont die CPU
 // so viel Audio liegt höchstens vor (muss > TICK_MS + Jitter des Head Units sein). 160 ms gibt Reserve,
 // wenn Node auf dem Head Unit kurz hängt (GC, andere Apps) – sonst knackt/stottert es (Underrun).
@@ -111,6 +111,7 @@ function hasLibasound() {
 const ALSA_SCRIPT = path.join(__dirname, 'alsa_play.py');
 // Geräte, die "auto" der Reihe nach probiert (das erste, das sich öffnen lässt, gewinnt)
 const AUTO_DEVICES = ['default', 'plughw:0,0', 'plughw:0,1'];
+const SMARTX_DEVICE = 'plug:smartx:CarLifeMedia_CF_48_STEREO';
 
 /**
  * Abspielwege in Reihenfolge. opts.device: ALSA-Gerät für den Python-Player ('auto' = AUTO_DEVICES).
@@ -130,7 +131,7 @@ function candidates(opts) {
   // ALSA über Python + ctypes (das Head Unit hat libasound und mgu-python, aber kein aplay)
   const py = findPython();
   if (py && fs.existsSync(ALSA_SCRIPT) && (hasLibasound() || process.env.ICONIX_ALSA_FORCE)) {
-    const dev = opts.device && opts.device !== 'auto' ? [opts.device] : AUTO_DEVICES;
+    const dev = opts.device === 'smartx' ? [SMARTX_DEVICE] : (opts.device && opts.device !== 'auto' ? [opts.device] : AUTO_DEVICES);
     dev.forEach(function (d) {
       // "name@/pfad/zur/alsa.conf" = Gerät aus BMWs eigener ALSA-Konfiguration (ALSA_CONFIG_PATH)
       const at = d.indexOf('@/');
@@ -139,6 +140,7 @@ function candidates(opts) {
         env: cfg ? { ALSA_CONFIG_PATH: cfg } : null });
     });
   }
+  if (opts.device === 'smartx') return out; // never fall back to occupied/default playback
   BACKENDS.forEach(function (b) {
     const p = findBin(b.bin);
     if (p) out.push({ name: b.name, path: p, argv: b.args(RATE) });
@@ -309,6 +311,7 @@ function Engine(opts) {
   this.lastTick = Date.now(); this.late = 0;
   this.f32 = new Float32Array(MAX_CHUNK * 2);
   this.timer = null;
+  this.routeUntil = 0; // SmartX requires an explicit, live AudioManager lease from the app
 }
 
 Engine.prototype.configure = function (cfg) {
@@ -398,6 +401,11 @@ Engine.prototype._nextTestDevice = function () {
   this._changed();
 };
 Engine.prototype.params = function (p) { this.synth.setParams(p); this.lastParams = Date.now(); };
+// Only an app which successfully owns its AudioManager connection may keep PCM flowing.
+// Heartbeat expires automatically if the app disappears; normal ALSA is unaffected.
+Engine.prototype.routeLease = function (granted) { const was = this.routeActive(); this.routeUntil = granted ? Date.now() + 2300 : 0; if (!granted && this.device === 'smartx' && this.out.child && !this.out.stopping) this.out.stop(); if (was !== this.routeActive()) this._changed(); };
+Engine.prototype.routeActive = function () { return this.device !== 'smartx' || Date.now() < this.routeUntil; };
+Engine.prototype.stopTest = function () { this.testUntil = 0; this._testUnmuted = false; this.out.stop(); this._changed(); };
 Engine.prototype.test = function () {
   this.testStart = Date.now(); this.testUntil = this.testStart + 9000;
   // nach einem Fehler beim Testsound alle Abspielprogramme erneut probieren
@@ -417,7 +425,7 @@ Engine.prototype.status = function () {
     rate: RATE, playing: !!out.child, error: out.error || sampleError, profile: this.synth.cfg.profile,
     underruns: out.underruns || 0, late: this.late, leadMs: LEAD_MS,
     players: out.list.map(function (b) { return b.name; }),
-    device: this.device, python: findPython(),
+    device: this.device, smartxRoute: this.device === 'smartx' ? this.routeActive() : null, python: findPython(),
     scan: this.scan ? (this.scan.devices || []).map(function (d) { return { name: d.name, ok: d.ok && !isSilent(d), silent: isSilent(d), error: d.error }; }) : null,
     scanError: this.scan && this.scan.error,
     devTest: this.devTest ? { device: this.devTest.list[this.devTest.i], i: this.devTest.i + 1, n: this.devTest.list.length } : null
@@ -452,7 +460,12 @@ Engine.prototype._tick = function () {
     synth.stale = now - this.lastParams > STALE_MS;
   }
   // Testsound auch bei "Stumm" hörbar machen
-  const wantSound = (synth.cfg.enabled || testing) && (!synth.stale || testing) && !(synth.cfg.profile === 'b57_540d' && (!synth.b57 || !synth.b57.ok));
+  const wantSound = (synth.cfg.enabled || testing) && (!synth.stale || testing) && this.routeActive() && !(synth.cfg.profile === 'b57_540d' && (!synth.b57 || !synth.b57.ok));
+  // If the SmartX route is lost, stop writing immediately, not after idle timeout.
+  if (this.device === 'smartx' && !this.routeActive()) {
+    if (out.child && !out.stopping) out.stop();
+    return;
+  }
   if (testing && !synth.cfg.enabled) { synth.cfg.enabled = true; this._testUnmuted = true; }
   if (!testing && this._testUnmuted) { synth.cfg.enabled = false; this._testUnmuted = false; }
 

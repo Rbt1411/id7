@@ -1,0 +1,45 @@
+{
+  "id": "smartx-testd",
+  "kind": "tool",
+  "version": "0.1.0",
+  "title": "SmartX Testdienst",
+  "description": "Kurzer leiser SmartX-Testton auf ausdruecklichen Tastendruck (keine Dauerausgabe).",
+  "mguHmi": [
+    "ID7"
+  ],
+  "optional": true,
+  "uninstallable": true,
+  "files": [
+    {
+      "path": "smartx-testd.js",
+      "mode": "0644"
+    },
+    {
+      "path": "smartx-tone.py",
+      "mode": "0755"
+    },
+    {
+      "path": "smartx-testd.sh",
+      "mode": "0755"
+    }
+  ],
+  "units": [
+    {
+      "name": "smartx-testd.service"
+    }
+  ],
+  "enable": [
+    {
+      "unit": "smartx-testd.service",
+      "target": "oapcontroller.service"
+    }
+  ],
+  "dropins": [],
+  "recmgr": [
+    "smartx-testd"
+  ],
+  "restart": [
+    "smartx-testd.service"
+  ],
+  "keepRunning": true
+}

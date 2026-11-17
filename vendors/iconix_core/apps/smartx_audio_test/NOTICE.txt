@@ -1,0 +1,4 @@
+car_audio.js is adapted from aurelmarius/bmw-apps, apps/aurelm_tvhplayer/car_audio.js.
+This module describes GPL-3.0-or-later inheritance from Moonride; review upstream licenses before public redistribution.
+https://github.com/aurelmarius/bmw-apps
+https://github.com/JustAnotherPU/moonride
