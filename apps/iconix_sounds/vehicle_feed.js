@@ -58,6 +58,7 @@ class VehicleFeed extends EventEmitter {
         this._first('rpm', v);
         if (raw === null || raw === 65535) return;
         this.v.rpm = raw * 0.25; this.v.rpmAt = Date.now();
+        this._recordRpm();
         this._sample();
       }
     });
@@ -75,6 +76,7 @@ class VehicleFeed extends EventEmitter {
         this._first('torque', v);
         if (raw === null || raw >= 4095) return; // 12 Bit, 4095 = kein Wert (car.js)
         this.v.torque = raw * 0.5 - 1023.5; this.v.torqueAt = Date.now();
+        this._sample();
       }
     });
     this._watch(IF.PEDAL, {
@@ -85,6 +87,7 @@ class VehicleFeed extends EventEmitter {
         const pct = raw * 0.025;
         if (pct < -2 || pct > 102) return;
         this.v.pedal = clamp(pct, 0, 100); this.v.pedalAt = Date.now();
+        this._sample();
       }
     });
   }
@@ -117,6 +120,14 @@ class VehicleFeed extends EventEmitter {
 
   fresh(key) { return Date.now() - this.v[key + 'At'] < FRESH_MS; }
 
+  // Keep RPM derivative history tied to true RPM events; torque/pedal events
+  // must not insert duplicate RPM values or distort fallback load estimation.
+  _recordRpm() {
+    const now = Date.now();
+    this.rpmHist.push([now, this.v.rpm]);
+    while (this.rpmHist.length > 2 && now - this.rpmHist[0][0] > 300) this.rpmHist.shift();
+  }
+
   _sample() {
     const cfg = this.getCfg();
     const now = Date.now();
@@ -133,11 +144,9 @@ class VehicleFeed extends EventEmitter {
       overrun = this.v.pedal < 1 && rpm > cfg.carIdle + 400;
     } else {
       // Ersatz: Drehzahlanstieg der letzten ~300 ms
-      this.rpmHist.push([now, rpm]);
-      while (this.rpmHist.length > 2 && now - this.rpmHist[0][0] > 300) this.rpmHist.shift();
-      const h0 = this.rpmHist[0];
+      const h0 = this.rpmHist[0] || [now, rpm];
       const dt = (now - h0[0]) / 1000;
-      const slope = dt > 0.05 ? (rpm - h0[1]) / dt : 0; // U/min pro Sekunde
+      const slope = dt > 0.05 && this.fresh('rpm') ? (rpm - h0[1]) / dt : 0; // U/min pro Sekunde
       load = clamp(slope / 1500, 0, 1);
       overrun = slope < -300 && rpm > cfg.carIdle + 400;
     }

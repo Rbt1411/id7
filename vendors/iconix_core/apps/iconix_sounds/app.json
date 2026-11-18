@@ -1,8 +1,8 @@
 {
   "id": "iconix_sounds",
   "title": "Iconix Sounds",
-  "description": "Iconix Sounds mit BMW B57 Sampleprofil und optionalem SmartX/CarLife-Audio (Beta; getrennt von BMW-Medienaudio; Test im Stand).",
-  "version": "0.5.4",
+  "description": "Iconix Sounds mit BMW B57 und SmartX/CarLife-Audio (Beta); optimierte Gasannahme und reduzierte SmartX-Puffer.",
+  "version": "0.5.5",
   "vendor": "custom",
   "loggingId": "ICXS",
   "iconGlyph": "engine",

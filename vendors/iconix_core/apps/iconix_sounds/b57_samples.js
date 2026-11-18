@@ -136,7 +136,7 @@ B57Samples.prototype.render=function(out,off,n,amp,ampStep,rpm,load,overrun,inte
   }
   var desiredIdle=clamp((1550-rpm)/850,0,1);
   var desiredAccel=overrun?0:clamp((load-.04)/.63,0,1);
-  var smoothing = 1 / (this.rate * .14);
+  var smoothing = 1 / (this.rate * .07); // quicker throttle response; smooth transitions retained
   var idleMix = this.mixIdle, accelMix = this.mixAccel;
   // Even in steady cruising: soft mechanical presence; high load produces full accel sample.
   var driveGain=.55+.55*load*intensity;

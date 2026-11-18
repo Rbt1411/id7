@@ -75,6 +75,12 @@ def open_pcm(lib, dev, rate, latency_us, nonblock=False):
     if r < 0:
         return None, 'open: ' + err(lib, r)
     r = lib.snd_pcm_set_params(h, SND_PCM_FORMAT_S16_LE, SND_PCM_ACCESS_RW_INTERLEAVED, 2, int(rate), 1, int(latency_us))
+    if r < 0 and int(latency_us) < 200000:
+        # Low-latency values are hints; fall back if this particular MGU does not support them.
+        r = lib.snd_pcm_set_params(h, SND_PCM_FORMAT_S16_LE, SND_PCM_ACCESS_RW_INTERLEAVED, 2, int(rate), 1, 200000)
+        if r >= 0:
+            sys.stderr.write('alsa_play: low-latency rejected, fallback to 200ms\n')
+            sys.stderr.flush()
     if r < 0:
         lib.snd_pcm_close(h)
         return None, 'set_params: ' + err(lib, r)

@@ -22,6 +22,9 @@ const TICK_MS = 20;          // 50 Wakeups/s (Blöcke à 882 Samples) – schont
 // so viel Audio liegt höchstens vor (muss > TICK_MS + Jitter des Head Units sein). 160 ms gibt Reserve,
 // wenn Node auf dem Head Unit kurz hängt (GC, andere Apps) – sonst knackt/stottert es (Underrun).
 const LEAD_MS = Number(process.env.ICONIX_LEAD_MS) || 160;
+// The regular ALSA route keeps conservative buffering; SmartX is separately tunable.
+const SMARTX_LEAD_MS = Number(process.env.ICONIX_SMARTX_LEAD_MS) || 80;
+const SMARTX_BUFFER_US = Number(process.env.ICONIX_SMARTX_BUFFER_US) || 120000;
 const BUFFER_US = Number(process.env.ICONIX_BUFFER_US) || 200000; // Puffer des Abspielprogramms
 const STALE_MS = 1500;       // ohne Daten -> ausblenden
 const IDLE_STOP_MS = 8000;   // so lange still -> Abspielprogramm beenden (gibt das Audiogerät frei)
@@ -135,7 +138,7 @@ function candidates(opts) {
       // "name@/pfad/zur/alsa.conf" = Gerät aus BMWs eigener ALSA-Konfiguration (ALSA_CONFIG_PATH)
       const at = d.indexOf('@/');
       const name = at > 0 ? d.slice(0, at) : d, cfg = at > 0 ? d.slice(at + 1) : null;
-      out.push({ name: 'alsa:' + d, path: py, argv: [ALSA_SCRIPT, 'play', name, String(RATE), String(BUFFER_US)], device: d,
+      out.push({ name: 'alsa:' + d, path: py, argv: [ALSA_SCRIPT, 'play', name, String(RATE), String(opts.device === 'smartx' ? SMARTX_BUFFER_US : BUFFER_US)], device: d,
         env: cfg ? { ALSA_CONFIG_PATH: cfg } : null });
     });
   }
@@ -415,7 +418,7 @@ Engine.prototype.status = function () {
     ok: !out.error && !sampleError,
     backend: out.backend || (out.list[0] && !out.error ? out.list[0].name : null),
     rate: RATE, playing: !!out.child, error: out.error || sampleError, profile: this.synth.cfg.profile,
-    underruns: out.underruns || 0, late: this.late, leadMs: LEAD_MS,
+    underruns: out.underruns || 0, late: this.late, leadMs: this.device === 'smartx' ? SMARTX_LEAD_MS : LEAD_MS,
     players: out.list.map(function (b) { return b.name; }),
     device: this.device, python: findPython(),
     scan: this.scan ? (this.scan.devices || []).map(function (d) { return { name: d.name, ok: d.ok && !isSilent(d), silent: isSilent(d), error: d.error }; }) : null,
@@ -441,7 +444,8 @@ Engine.prototype.stop = function () {
 Engine.prototype._tick = function () {
   const now = Date.now(), synth = this.synth, out = this.out;
   // zählt Wakeups, die so spät kamen, dass der Vorlauf aufgebraucht war
-  if (out.child && now - this.lastTick > LEAD_MS) this.late++;
+  const leadMs = this.device === 'smartx' ? SMARTX_LEAD_MS : LEAD_MS;
+  if (out.child && now - this.lastTick > leadMs) this.late++;
   this.lastTick = now;
   if (this.devTest && now >= this.devTest.until) this._nextTestDevice();
   const testing = now < this.testUntil;
@@ -468,8 +472,14 @@ Engine.prototype._tick = function () {
   }
   if (!out.child) return;
 
-  let due = Math.floor((now - this.t0 + LEAD_MS) / 1000 * RATE) - this.written;
-  if (due > RATE / 2) { this.t0 = now; this.written = 0; due = Math.floor(LEAD_MS / 1000 * RATE); } // Resync nach Hänger
+  let due = Math.floor((now - this.t0 + leadMs) / 1000 * RATE) - this.written;
+  // Do not catch up a large queue of stale audio after SmartX backpressure.
+  // Limit to 250ms; ALSA default keeps the original 500ms limit.
+  const maxLateFrames = this.device === 'smartx' ? RATE / 4 : RATE / 2;
+  if (due > maxLateFrames) {
+    this.t0 = now; this.written = 0;
+    due = Math.floor(leadMs / 1000 * RATE);
+  }
   while (due > 0 && !out.blocked && out.child) {
     const n = Math.min(due, MAX_CHUNK);
     synth.render(this.f32, n);

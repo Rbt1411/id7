@@ -21,7 +21,7 @@ const VehicleFeed = require('./vehicle_feed');
 const { createCarAudio } = require('./smartx_route');
 const path = require('path');
 
-const VERSION = '0.5.4';
+const VERSION = '0.5.5';
 const DEFAULTS = {
   enabled: true, profile: Profiles.DEFAULT, volume: 60, intensity: 70, pops: false, sport: false,
   muteParked: false, dialVolume: true, loadSource: 'auto', alsaDevice: 'auto', smartxContinuous: false, maxTorque: 400, carIdle: 800, carRedline: 4800

@@ -1,9 +1,9 @@
 {
   "id": "iconix-audiod",
   "kind": "tool",
-  "version": "0.5.4",
+  "version": "0.5.5",
   "title": "Iconix Audio",
-  "description": "Iconix Audio mit BMW B57 und opt-in SmartX/CarLife-PCM (Beta); BMW AudioManager-Route durch App.",
+  "description": "Iconix Audio mit BMW B57 und SmartX/CarLife-PCM; einstellbare Low-Latency-Puffer (Beta).",
   "mguHmi": [
     "ID7",
     "ID8"
