@@ -86,7 +86,7 @@
       sub: 0.4, cutoff: 1400, cutoffPerKmh: 16, lfoHz: 4.5, lfoDepth: 0.12, drive: 1.1
     },
     {
-      id: 'b57_540d', name: 'BMW B57 540d Sport', kind: 'sample',
+      id: 'b57_540d', name: 'Audi A6 3.0 BiTDI', kind: 'sample',
       cylinders: 6, idleRpm: 750, maxRpm: 4550, gain: 1.0,
       harmonics: [], turbo: 0, popRate: 0
     }

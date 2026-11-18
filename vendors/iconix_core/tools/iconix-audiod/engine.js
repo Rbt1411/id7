@@ -23,8 +23,8 @@ const TICK_MS = 20;          // 50 Wakeups/s (Blöcke à 882 Samples) – schont
 // wenn Node auf dem Head Unit kurz hängt (GC, andere Apps) – sonst knackt/stottert es (Underrun).
 const LEAD_MS = Number(process.env.ICONIX_LEAD_MS) || 160;
 // The regular ALSA route keeps conservative buffering; SmartX is separately tunable.
-const SMARTX_LEAD_MS = Number(process.env.ICONIX_SMARTX_LEAD_MS) || 80;
-const SMARTX_BUFFER_US = Number(process.env.ICONIX_SMARTX_BUFFER_US) || 120000;
+const SMARTX_LEAD_MS = Number(process.env.ICONIX_SMARTX_LEAD_MS) || 40;
+const SMARTX_BUFFER_US = Number(process.env.ICONIX_SMARTX_BUFFER_US) || 80000;
 const BUFFER_US = Number(process.env.ICONIX_BUFFER_US) || 200000; // Puffer des Abspielprogramms
 const STALE_MS = 1500;       // ohne Daten -> ausblenden
 const IDLE_STOP_MS = 8000;   // so lange still -> Abspielprogramm beenden (gibt das Audiogerät frei)

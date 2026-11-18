@@ -1,9 +1,9 @@
 {
   "id": "iconix-audiod",
   "kind": "tool",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "title": "Iconix Audio",
-  "description": "Iconix Audio mit BMW B57 und SmartX/CarLife-PCM; einstellbare Low-Latency-Puffer (Beta).",
+  "description": "Iconix mit Audi A6 3.0 BiTDI Aufnahme und SmartX Low Latency (Beta).",
   "mguHmi": [
     "ID7",
     "ID8"
@@ -49,6 +49,10 @@
     },
     {
       "path": "b57_decel.wav",
+      "mode": "0644"
+    },
+    {
+      "path": "b57_high.wav",
       "mode": "0644"
     }
   ],

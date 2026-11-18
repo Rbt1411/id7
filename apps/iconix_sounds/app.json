@@ -1,8 +1,8 @@
 {
   "id": "iconix_sounds",
   "title": "Iconix Sounds",
-  "description": "Iconix Sounds mit BMW B57 und SmartX/CarLife-Audio (Beta); optimierte Gasannahme und reduzierte SmartX-Puffer.",
-  "version": "0.5.5",
+  "description": "Iconix mit Audi A6 3.0 BiTDI Aufnahme und SmartX Low Latency (Beta).",
+  "version": "0.5.6",
   "vendor": "custom",
   "loggingId": "ICXS",
   "iconGlyph": "engine",
@@ -120,7 +120,7 @@
         ],
         [
           "b57_540d",
-          "BMW B57 540d Sport"
+          "Audi A6 3.0 BiTDI"
         ]
       ]
     },

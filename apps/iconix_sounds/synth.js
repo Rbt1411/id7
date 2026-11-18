@@ -90,6 +90,9 @@
 
   Synth.prototype._setProfile = function (id) {
     this.profile = Profiles.get(id);
+    // Shorter control smoothing only for the recording-based profile.
+    this.kR = 1 - Math.exp(-CR / (this.sr * (this.profile.kind === "sample" ? 0.018 : 0.04)));
+    this.kL = 1 - Math.exp(-CR / (this.sr * (this.profile.kind === "sample" ? 0.025 : 0.08)));
     this.cfg.profile = this.profile.id;
     this.prep = prepare(this.profile);
     if (this.profile.kind === 'sample' && B57Samples && !this.b57) this.b57 = new B57Samples(this.sr);
