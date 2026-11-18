@@ -2,7 +2,7 @@
   "id": "dpf",
   "title": "DPF Monitor",
   "description": "Diesel PartikelFilter Monitor.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "vendor": "RT-APPS",
   "loggingId": "OAB2",
   "iconGlyph": "DPF",
@@ -25,7 +25,7 @@
       "buttons": [
         [
           "BTN_OVERVIEW",
-          "Übersicht"
+          "Ubersicht"
         ],
         [
           "BTN_LIVE",
@@ -45,7 +45,7 @@
   "settings": [
     {
       "key": "sootMax",
-      "label": "Regeneration bei Ungefähr: (Ruß-Gramm)",
+      "label": "Regeneration bei Ungefahr: (Ruß-Gramm)",
       "type": "number",
       "unit": "g",
       "default": 0,

@@ -34,13 +34,13 @@ const { drawDpf } = require('./illustration');
 const RegenEvidence = require('./regen-evidence');
 
 const W = 1600, H = 520;
-const PAGES = ['Übersicht', 'Live-Daten', 'Verlauf'];
+const PAGES = ['Ubersicht', 'Live-Daten', 'Verlauf'];
 const BUTTONS = ['BTN_OVERVIEW', 'BTN_LIVE', 'BTN_HISTORY'];
 const FAST = ['soot', 'regenReq', 'dp', 'tDpf', 'tOxi'];                 // bei jedem Durchlauf
 const SLOW = ['sootSim', 'ash', 'distSince', 'avgInterval', 'fuelSince', 'interrupted', 'lock', 'flowRes', 'timeSince'];   // bei jedem fünften Durchlauf
 const ALL = FAST.concat(SLOW);
 const NAMES = {
-    soot: 'Rußmasse (gemessen)', sootSim: 'Rußmasse (berechnet)', ash: 'Ölaschemasse', distSince: 'Strecke seit Regeneration',
+    soot: 'Rußmasse (gemessen)', sootSim: 'Rußmasse (berechnet)', ash: 'Olaschemasse', distSince: 'Strecke seit Regeneration',
     avgInterval: 'Mittleres Reg.-Intervall', fuelSince: 'Kraftstoff seit Regeneration', regenReq: 'Reg.-Anforderung (nicht aktiv)',
     interrupted: 'Reg.-Unterbrechungsstatus', lock: 'Regenerationssperre', dp: 'Differenzdruck',
     tDpf: 'Abgastemperatur vor DPF', tOxi: 'Abgastemperatur vor Oxikat', flowRes: 'Strömungswiderstand (gefiltert)', timeSince: 'Motorlaufzeit seit Regeneration',
@@ -244,9 +244,9 @@ mgu.run({
             if (!link.available) return 'Diagnoseverbindung getrennt';
             const r = (cfg[k] || []).map((c) => rd.raws[rd.key(c)]).filter(Boolean);
             if (!r.length) return 'Wird ausgelesen...';
-            if (r.every((x) => /NRC (31|11|12)/.test(x.why))) return 'Im Fahrzeug nicht verfügbar';
+            if (r.every((x) => /NRC (31|11|12)/.test(x.why))) return 'Im Fahrzeug nicht verfugbar';
             if (r.every((x) => x.why === 'no reply')) return 'Keine Antwort – Zündung an?';
-            return 'Kein DDE-Messwert verfügbar';
+            return 'Kein DDE-Messwert verfugbar';
         }
 
         /** Geschätzte Restkilometer bis zur Rußschwelle anhand der Rußzunahme seit der letzten Regeneration. */
@@ -286,24 +286,24 @@ mgu.run({
             cv.fillRect(830, 404, 730, 1, '#3a3a3a');
             let title, sub, dot = null;
             if (running() && d.demo) {
-                title = 'Regeneration läuft'; dot = P.heat;
+                title = 'Regeneration am Laufen'; dot = P.heat;
                 sub = 'Seit ' + dur((mono() - regen.t0) / 1000) + ' min – Motor bitte weiterlaufen lassen';
             } else if (running()) {
                 title = 'Regeneration vermutet'; dot = P.heat;
                 sub = 'Aus Temperatur und Rußverlauf vermutet – nicht von DDE bestätigt';
             } else if (evidence.mode === 'requested') {
                 title = 'Regeneration angefordert'; dot = P.warn;
-                sub = 'DDE-Anforderung bedeutet nicht, dass sie bereits läuft';
+                sub = 'DDE-Anforderung bedeutet nicht, dass sie bereits lauft';
             } else if (!G.isNum(d.soot)) { title = 'Keine Daten'; sub = why('soot'); }
             else if (!d.demo && !G.isNum(d.tDpf)) { title = 'Rußdaten verfügbar'; sub = 'Regenerationsstatus unbekannt – Temperatur fehlt'; }
             else if (d.soot >= thr * 0.9) {
                 title = 'Rußgrenze bald erreicht'; dot = P.warn;
-                sub = 'Grenze geschätzt – DDE entscheidet selbst über Regeneration';
+                sub = 'Grenze geschatzt – DDE entscheidet selbst uber Regeneration';
             } else {
                 const left = kmLeft(d, thr);
-                title = d.demo ? 'Partikelfilter in Ordnung' : 'Rußmasse unter geschätzter Grenze';
-                sub = left === null ? 'Ruß ' + num(d.soot, 1, 'g') + ' / geschätzte Grenze ' + G.fmt(thr, 0) + ' g'
-                    : 'Nächste Regeneration geschätzt in ' + thousands(Math.round(left / 10) * 10) + ' km';
+                title = d.demo ? 'Partikelfilter in Ordnung' : 'Keine Regeneration am Laufen';
+                sub = left === null ? 'Ruß ' + num(d.soot, 1, 'g') + ' / geschatzte Grenze ' + G.fmt(thr, 0) + ' g'
+                    : 'Nächste Regeneration geschatzt in ' + thousands(Math.round(left / 10) * 10) + ' km';
             }
             let tx = 846;
             if (dot) { cv.circle(856, 440, 8 + (running() ? 2 * Math.sin(Date.now() / 300) : 0), withAlpha(dot, 0.3)); cv.circle(856, 440, 6, dot); tx = 876; }
@@ -325,7 +325,7 @@ mgu.run({
             });
             cv.fillRect(1004, 52, 1, 440, P.line);
             const rows = [
-                ['Ölaschemasse', num(d.ash, 1, 'g')],
+                ['Olaschemasse', num(d.ash, 1, 'g')],
                 ['Rußmasse (berechnet)', num(d.sootSim, 1, 'g')],
                 ['Seit Regeneration', num(d.distSince, 1, 'km')],
                 ['Kraftstoff seit Regeneration', num(d.fuelSince, 1, 'l')],
@@ -362,13 +362,13 @@ mgu.run({
             const list = (store.log || []).slice();
             if (regen && !regen.demo) list.unshift({ date: regen.date, sootStart: regen.sootStart, durS: ((regen.endedAt || mono()) - regen.t0) / 1000, peakT: regen.peakT, result: regen.endedAt ? 'checking' : 'running' });
             const COL = { 'inferred-completed': P.warn, 'inferred-ended': P.dim, 'distance-reset': P.dim, running: P.heat, checking: P.dim };
-            const WORD = { 'inferred-completed': 'Vermutlich abgeschlossen', 'inferred-ended': 'Vermutlich beendet', 'distance-reset': 'Streckenzähler zurückgesetzt', running: 'Regeneration vermutet', checking: 'Beendet, prüfe...', 'not watched': 'Während die App geschlossen war' };
+            const WORD = { 'inferred-completed': 'Vermutlich abgeschlossen', 'inferred-ended': 'Vermutlich beendet', 'distance-reset': 'Streckenzahler zuruckgesetzt', running: 'Regeneration vermutet', checking: 'Beendet, prufe...', 'not watched': 'Wahrend die App geschlossen war' };
             if (!list.length) {
                 cv.text(d.demo ? 'Demo: keine Speicherung' : 'Noch keine Regeneration erfasst', 56, 130, 26, P.text2);
                 cv.text('Zum Erfassen die App während der Regeneration öffnen.', 56, 166, 21, P.dim);
             }
             list.slice(0, 6).forEach((e, i) => {
-                const sub = (e.result === 'not watched' || e.result === 'distance-reset') ? 'Aus DDE-Zählerrücksprung abgeleitet (unbestätigt)'
+                const sub = (e.result === 'not watched' || e.result === 'distance-reset') ? 'Aus DDE-Zahlerrucksprung abgeleitet (unbestatigt)'
                     : 'Ruß ' + num(e.sootStart, 1, 'g') + '   Dauer ' + dur(e.durS) + ' min   Spitze ' + (G.isNum(e.peakT) ? Math.round(T(e.peakT)) + ' ' + tU() : '--');
                 ID7.row(cv, P, 40, 84 + i * 70, 880, 70, e.date ? date(e.date) : '--', WORD[e.result] || e.result, { sub, valueColor: COL[e.result] || P.dim, valueSize: 22, focus: i === 0 && e.result === 'running' });
             });
@@ -400,7 +400,7 @@ mgu.run({
                 cv.text('Durchschnitt ' + thousands(avg) + ' km', bx + bw, ay - 10, 18, P.accent, { align: 'right' });
             }
             ID7.row(cv, P, 970, 410, 590, 44, 'Intervall (km), Kilometerstand am Ende', null, { size: 18 });
-            ID7.row(cv, P, 970, 454, 590, 44, 'Ölasche im Filter', num(d.ash, 1, 'g'), { size: 21 });
+            ID7.row(cv, P, 970, 454, 590, 44, 'Olasche im Filter', num(d.ash, 1, 'g'), { size: 21 });
         }
 
         /* ---------- Anzeige ---------- */
